@@ -1,6 +1,6 @@
 <?php
 
-namespace Bnsal\LaraAuth;
+namespace Bnsal\LaraScraper;
 
 use Illuminate\Support\ServiceProvider;
 

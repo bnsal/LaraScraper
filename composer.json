@@ -10,5 +10,15 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {}
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Bnsal\\LaraScraper\\LaraScraperProvider"
+            ],
+            "aliases": {
+                "Debugbar": "Barryvdh\\Debugbar\\Facade"
+            }
+        }
+    },
 }

@@ -1,0 +1,14 @@
+{
+    "name": "bnsal/larascraper",
+    "description": "Scrapes metadata of any url",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Keshav Bansal",
+            "email": "keshav@bnsal.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}

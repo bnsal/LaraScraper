@@ -15,10 +15,15 @@
         "laravel": {
             "providers": [
                 "Bnsal\\LaraScraper\\LaraScraperProvider"
-            ],
-            "aliases": {
-                "Debugbar": "Barryvdh\\Debugbar\\Facade"
-            }
+            ]
+        }
+    },
+    "autoload": {
+        "classmap": [
+            "src/Controllers"
+        ],
+        "psr-0": {
+            "Bnsal\\LaraScraper\\": "src/"
         }
     }
 }

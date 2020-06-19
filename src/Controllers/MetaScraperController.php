@@ -13,13 +13,17 @@ class MetaScraperController extends SimpleHTMLDomController
 
 	private $HTML;
 	
-	public function __construct( $url = 'https://ytbpals.com' ){
+	public function __construct( $url = 'http://bnsal.com' ){
 		$this->URL = $url;
 		$this->extractHostName();
 		Parent::__construct( $url );
 	}
+	
 
 	public function getTitle(){
+		if( !$this->getHTML() ){
+			return "";
+		}
 		$titleTag = $this->getHTML()->find('title', 0);
 		if($titleTag){
 			return $titleTag->plaintext;
@@ -28,6 +32,9 @@ class MetaScraperController extends SimpleHTMLDomController
 	}
 
 	public function getDescription(){
+		if( !$this->getHTML() ){
+			return "";
+		}
 		$description = $this->getHTML()->find('meta[name=description]', 0);
 		if(!$description){
 			$description = $this->getHTML()->find('meta[itemprop=description]', 0);
@@ -46,6 +53,9 @@ class MetaScraperController extends SimpleHTMLDomController
 
 	public function getAllAnchors(){
 		$results = [];
+		if( !$this->getHTML() ){
+			return $results;
+		}
 		$rows = $this->getHTML()->find('a');
 		if($rows){
 			foreach ($rows as $row) {
@@ -91,6 +101,9 @@ class MetaScraperController extends SimpleHTMLDomController
 
 	public function filterFromExternalAnchors( $urlToFilter ){
 		$results = [];
+		if( !$this->getHTML() ){
+			return $results;
+		}
 		$host = $this->extractHostName($urlToFilter);
 		$rows = $this->getAllExternalAnchors();
 		if($rows){

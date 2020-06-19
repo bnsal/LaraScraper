@@ -74,13 +74,30 @@ function file_get_html(
 	 * For sourceforge users: uncomment the next line and comment the
 	 * retrieve_url_contents line 2 lines down if it is not already done.
 	 */
-	$contents = file_get_contents(
-		$url,
-		$use_include_path,
-		$context,
-		$offset,
-		$maxLen
-	);
+
+
+	try{
+
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		$contents = curl_exec($curl);
+		curl_close($curl);
+
+		
+	}catch( Exception $e ){
+		
+		$contents = file_get_contents(
+			$url,
+			$use_include_path,
+			$context,
+			$offset,
+			$maxLen
+		);
+	}
+	
 	// $contents = retrieve_url_contents($url);
 
 	if (empty($contents) || strlen($contents) > $maxLen) {

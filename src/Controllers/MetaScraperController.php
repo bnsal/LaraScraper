@@ -59,11 +59,20 @@ class MetaScraperController extends SimpleHTMLDomController
 		$rows = $this->getHTML()->find('a');
 		if($rows){
 			foreach ($rows as $row) {
+
+				$doFollow = 1;
+				if( isset($row->rel) && $row->rel ){
+					if( stripos( '__' . $row->rel , "nofollow" ) ){
+						$doFollow = 0;
+					}
+				}
+
 				$results[] = [
 					"href" => $row->href,
 					"title" => $row->title,
 					"alt" => $row->alt,
-					"text" => $row->plaintext
+					"text" => $row->plaintext,
+					"doFollow" => $doFollow
 				];
 			}
 		}

@@ -78,16 +78,23 @@ function file_get_html(
 
 	try{
 
+		$agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15';
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($curl, CURLOPT_USERAGENT, $agent);
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_AUTOREFERER, true);
+		curl_setopt($curl, CURLOPT_COOKIEJAR, './cookies.txt');
+		curl_setopt($curl, CURLOPT_COOKIEFILE, '/cookies.txt');
 		$contents = curl_exec($curl);
 		curl_close($curl);
 
 		
 	}catch( Exception $e ){
+
+		//prd( $e->getMessage() );
 		
 		$contents = file_get_contents(
 			$url,

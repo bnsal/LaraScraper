@@ -68,7 +68,7 @@ class MetaScraperController extends SimpleHTMLDomController
 				}
 
 				$results[] = [
-					"href" => $row->href,
+					"href" => ltrim( ltrim(rtrim($row->href, "/"), "/"), "/"),
 					"title" => $row->title,
 					"alt" => $row->alt,
 					"text" => $row->plaintext,
@@ -117,8 +117,13 @@ class MetaScraperController extends SimpleHTMLDomController
 		$rows = $this->getAllExternalAnchors();
 		if($rows){
 			foreach ($rows as $row) {
+				//pr( urldecode($row['href']) );
 				if( $this->extractHostName($row["href"]) == $host ){
 					$results[] = $row;
+				}else{
+					if( stripos( '_' . urldecode($row['href']), $host ) ){
+						$results[] = $row;
+					}
 				}
 			}
 		}

@@ -92,14 +92,14 @@ class MetaScraperController extends SimpleHTMLDomController
 		return $results;
 	}
 	
-	public function getAllExternalAnchors(){
+	public function getAllExternalAnchors( $hostToFilter ){
 		$results = [];
 		$rows = $this->getAllAnchors();
 		if($rows){
 			foreach ($rows as $row) {
 				if( $row["href"] ){
 					$host = $this->extractHostName($row["href"]);
-					if( $host && $host != $this->HOST_NAME ){
+					if( $host && ( ($host != $this->HOST_NAME) || stripos( '_' . urldecode($row['href']), $hostToFilter ) ) ){
 						$results[] = $row;
 					}
 				}
@@ -114,7 +114,7 @@ class MetaScraperController extends SimpleHTMLDomController
 			return $results;
 		}
 		$host = $this->extractHostName($urlToFilter);
-		$rows = $this->getAllExternalAnchors();
+		$rows = $this->getAllExternalAnchors( $host );
 		if($rows){
 			foreach ($rows as $row) {
 				//pr( urldecode($row['href']) );

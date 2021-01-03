@@ -9,12 +9,21 @@ class MetaScraperController extends SimpleHTMLDomController
 
 	private $URL;
 
+	private $URL_SCEHEME;
+
+	private $URL_HOST;
+
 	private $HOST_NAME;
 
 	private $HTML;
 	
 	public function __construct( $url = 'http://bnsal.com' ){
 		$this->URL = $url;
+
+		$parts = parse_url($url);
+		$this->URL_SCEHEME = $parts['scheme'];
+		$this->URL_HOST = $parts['host'];
+
 		$this->extractHostName();
 		Parent::__construct( $url );
 	}
@@ -51,7 +60,7 @@ class MetaScraperController extends SimpleHTMLDomController
 		return "";
 	}
 
-	public function getAllAnchors(){
+	public function getAllAnchors( $splitByHash = false ){
 		$results = [];
 		if( !$this->getHTML() ){
 			return $results;
@@ -67,8 +76,17 @@ class MetaScraperController extends SimpleHTMLDomController
 					}
 				}
 
+				$row->href = trim( ltrim(rtrim($row->href, "/"), "/"), "/");
+				if( !$this->startsWith($row->href, 'http://') && !$this->startsWith($row->href, 'https://') && !$this->startsWith($row->href, 'www.') ) {
+					$row->href = $this->URL_SCEHEME . '://' . $this->URL_HOST . '/' . $row->href;
+				}
+
+				if( strpos($row->href, '#') ) {
+					$row->href = trim( explode("#", $row->href)[0] );
+				}
+
 				$results[] = [
-					"href" => ltrim( ltrim(rtrim($row->href, "/"), "/"), "/"),
+					"href" => $row->href,
 					"title" => $row->title,
 					"alt" => $row->alt,
 					"text" => $row->plaintext,
@@ -79,12 +97,16 @@ class MetaScraperController extends SimpleHTMLDomController
 		return $results;
 	}
 
-	public function getAllInternalAnchors(){
+	public function getAllInternalAnchors( $prefix = null, $splitByHash = false ){
 		$results = [];
-		$rows = $this->getAllAnchors();
+		$rows = $this->getAllAnchors( $splitByHash );
 		if($rows){
 			foreach ($rows as $row) {
-				if( $row["href"] && $this->extractHostName($row["href"]) == $this->HOST_NAME ){
+				if( $prefix ) {
+					if( $row["href"] && $this->startsWith($row["href"], $prefix) ){
+						$results[] = $row;
+					}
+				} else if( $row["href"] && $this->extractHostName($row["href"]) == $this->HOST_NAME ){
 					$results[] = $row;
 				}
 			}
@@ -144,6 +166,10 @@ class MetaScraperController extends SimpleHTMLDomController
 			$this->HOST_NAME = $hostName;
 		}
 		return $hostName;
+	}
+
+	public function startsWith ($string, $startString) { 
+	    return (substr($string, 0, strlen($startString)) === $startString); 
 	}
 
 

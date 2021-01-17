@@ -44,6 +44,7 @@ defined('DEFAULT_BR_TEXT') || define('DEFAULT_BR_TEXT', "\r\n");
 defined('DEFAULT_SPAN_TEXT') || define('DEFAULT_SPAN_TEXT', ' ');
 defined('MAX_FILE_SIZE') || define('MAX_FILE_SIZE', 60000000);
 define('HDOM_SMARTY_AS_TEXT', 1);
+ini_set("memory_limit",-1);
 
 function file_get_html(
 	$url,
@@ -104,8 +105,6 @@ function file_get_html(
 			$maxLen
 		);
 	}
-	
-	// $contents = retrieve_url_contents($url);
 
 	if (empty($contents) || strlen($contents) > $maxLen) {
 		$dom->clear();
@@ -2227,7 +2226,12 @@ class simple_html_dom
 
 			$idx = ($remove_tag) ? 0 : 1; // 0 = entire match, 1 = submatch
 			$this->noise[$key] = $matches[$i][$idx][0];
-			$this->doc = substr_replace($this->doc, $key, $matches[$i][$idx][1], strlen($matches[$i][$idx][0]));
+			try {
+				$this->doc = substr_replace($this->doc, $key, $matches[$i][$idx][1], strlen($matches[$i][$idx][0]));
+			} catch ( \Exception $e ) {
+				\Log::emergency($e);
+			}
+			
 		}
 
 		// reset the length of content

@@ -15,7 +15,7 @@ class MetaScraperController extends SimpleHTMLDomController
 
 	private $HOST_NAME;
 
-	private $HTML;
+	public $HTML;
 	
 	public function __construct( $url = 'http://bnsal.com' ){
 		$this->URL = $url;
@@ -26,6 +26,10 @@ class MetaScraperController extends SimpleHTMLDomController
 
 		$this->extractHostName();
 		Parent::__construct( $url );
+	}
+
+	public function clear() {
+		$this->getHTML()->clear();
 	}
 	
 

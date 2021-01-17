@@ -9,7 +9,7 @@ class SimpleHTMLDomController
 
 	private $URL;
 
-	private $HTML;
+	public $HTML;
 	
 	public function __construct($url){
 		$this->URL = $url;

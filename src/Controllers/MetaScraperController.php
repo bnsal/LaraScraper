@@ -133,6 +133,29 @@ class MetaScraperController extends SimpleHTMLDomController
 		}
 		return $results;
 	}
+	
+	public function getAllExternalAnchorsWithoutSocials( $hostToFilter ){
+		$results = $this->getAllExternalAnchors( $hostToFilter );
+		$socialUrls = [ 'facebook.com', 'reddit.com', 'instagram.com', 'twitter.com', 'linkedin.com', 'whatsapp.com', 'tumblr.com', 'pinterest.com', 'blogger.com', 'evernote.com', 'livejournal.com', 'getpocket.com', 'flipboard.com', 'ycombinator.com', 'google.com', 'instapaper.com', 'diasporafoundation.org', 'qq.com', 'weibo.com', 'vk.com', 'ok.ru', 'douban.com', 'renren.com', 'xing.com', 'skype.com', 'line.me', 't.me', 'telegram.me', 'yahoo.com', 'example.com', 'addthis.com', 'scoop.it' ];
+
+		$newResult = [];
+		if( $results ) {
+			foreach ($results as $key => $res) {
+				$found = false;
+				foreach ($socialUrls as $k => $socialUrl) {
+					if( stripos( '_' . $res['href'], $socialUrl) ) {
+						$found = true;
+						break;
+					}
+				}
+				if( !$found ) {
+					$newResult[] = $res;
+				}
+			}
+		}
+
+		return $newResult;
+	}
 
 	public function filterFromExternalAnchors( $urlToFilter ){
 		$results = [];

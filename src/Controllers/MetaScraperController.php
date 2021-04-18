@@ -90,10 +90,10 @@ class MetaScraperController extends SimpleHTMLDomController
 				}
 
 				$results[] = [
-					"href" => $row->href,
-					"title" => $row->title,
-					"alt" => $row->alt,
-					"text" => $row->plaintext,
+					"href" => $row->href ? trim($row->href) : $row->href,
+					"title" => $row->title ? trim($row->title) : $row->title,
+					"alt" => $row->alt ? trim($row->alt) : $row->alt,
+					"text" => $row->plaintext ? trim($row->plaintext) : $row->plaintext,
 					"doFollow" => $doFollow
 				];
 			}

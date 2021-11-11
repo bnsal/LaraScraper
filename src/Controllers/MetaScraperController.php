@@ -125,7 +125,7 @@ class MetaScraperController extends SimpleHTMLDomController
 			foreach ($rows as $row) {
 				if( $row["href"] ){
 					$host = $this->extractHostName($row["href"]);
-					if( $host && ( ($host != $this->HOST_NAME) || stripos( '_' . urldecode($row['href']), $hostToFilter ) ) ){
+					if( $host && ( ($host != $this->HOST_NAME) || stripos( '_' . urldecode($row['href']), strval($hostToFilter) ) ) ){
 						$results[] = $row;
 					}
 				}
@@ -143,7 +143,7 @@ class MetaScraperController extends SimpleHTMLDomController
 			foreach ($results as $key => $res) {
 				$found = false;
 				foreach ($socialUrls as $k => $socialUrl) {
-					if( stripos( '_' . $res['href'], $socialUrl) ) {
+					if( stripos( '_' . $res['href'], strval($socialUrl)) ) {
 						$found = true;
 						break;
 					}
@@ -170,7 +170,7 @@ class MetaScraperController extends SimpleHTMLDomController
 				if( $this->extractHostName($row["href"]) == $host ){
 					$results[] = $row;
 				}else{
-					if( stripos( '_' . urldecode($row['href']), $host ) ){
+					if( stripos( '_' . urldecode($row['href']), strval($host) ) ){
 						$results[] = $row;
 					}
 				}
